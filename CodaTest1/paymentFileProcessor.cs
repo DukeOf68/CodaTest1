@@ -7,9 +7,14 @@ namespace CodaTest1
     public static class paymentFileProcessor
     {
         [FunctionName("paymentFileProcessor")]
-        public static void Run([BlobTrigger("samples-workitems/{name}", Connection = "")]Stream myBlob, string name, TraceWriter log)
+        public static void Run(
+            [BlobTrigger("cehcontainer1/CODA01{inFilename}")]
+            Stream inFileBlob, 
+            string inFilename, 
+            
+            TraceWriter log)
         {
-            log.Info($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
+            log.Info($"C# Blob trigger function Processed blob\n Name:{inFilename} \n Size: {inFileBlob.Length} Bytes");
         }
     }
 }

@@ -14,12 +14,12 @@ namespace CodaTest1
         [FunctionName("paymentsWithDbCodaCodes")]
         public static async Task Run(
 
-                    [BlobTrigger("pm-func-demo2-1/LocalPM{name}")] Stream PmInFile,
-                    string name,
+            [BlobTrigger("pm-func-demo2-1/LocalPM{name}")] Stream PmInFile,
+            string name,
 
-                    [Blob("pm-func-demo2-2/LocalOUT{name}", FileAccess.Write)] Stream PmCmOutFile,
+            [Blob("pm-func-demo2-2/LocalOUT{name}", FileAccess.Write)] Stream PmCmOutFile,
 
-                    TraceWriter log)
+            TraceWriter log)
 
         {
 
@@ -43,7 +43,7 @@ namespace CodaTest1
             loggit.log("Finish");
 
         }
-                 
+
         //todo - accessibilty - privates below here.
         //todo - inject XmlWriter? (dunno for a func tbh)
 
@@ -99,7 +99,7 @@ namespace CodaTest1
         {
             private readonly IMyLogger _log;
 
-            public PaymentProcessor(IMyLogger log)      //interfaces -   ITraceWriter?
+            public PaymentProcessor(IMyLogger log) //interfaces -   ITraceWriter?
             {
                 _log = log;
             }
@@ -243,81 +243,91 @@ namespace CodaTest1
                 xr.Dispose();
             }
         }
-    }
 
-    #region "logic classes"
-    internal class SqlDbStub
-    {
-        public List<CodaCode> CodaCodes(TraceWriter log)
+
+        #region "logic classes"
+
+        public class SqlDbStub
         {
-
-            List<CodaCode> codes = new List<CodaCode>();
-
-            int id;
-            string policyNumber;
-            string codaCode;
-
-            try
+            public List<CodaCode> CodaCodes(TraceWriter log)
             {
-                //Pass the file path and file name to the StreamReader constructor
-                using (StreamReader sr = new StreamReader("C:/temp/loadCodaMappings.csv"))
+
+                List<CodaCode> codes = new List<CodaCode>();
+
+                int id;
+                string policyNumber;
+                string codaCode;
+
+                try
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    //Pass the file path and file name to the StreamReader constructor
+                    using (StreamReader sr = new StreamReader("C:/temp/loadCodaMappings.csv"))
                     {
-                        string[] field = line.Split(',');
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            string[] field = line.Split(',');
 
-                        id = Convert.ToInt32(field[0]);
-                        policyNumber = field[1];
-                        codaCode = field[2];
+                            id = Convert.ToInt32(field[0]);
+                            policyNumber = field[1];
+                            codaCode = field[2];
 
-                        CodaCode cc = new CodaCode() { Id = id, PolicyNumber = policyNumber, Coda = codaCode };
-                        codes.Add(cc);
+                            CodaCode cc = new CodaCode() { Id = id, PolicyNumber = policyNumber, Coda = codaCode };
+                            codes.Add(cc);
 
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Exception: " + e.Message);
+                }
+                //finally
+                //{
+                //    Console.WriteLine("Executing finally block.");
+                //}
+
+
+                return codes;
             }
-            catch (Exception e)
+        }
+
+
+        public interface IMyLogger
+        {
+            void log(string str);
+        }
+
+        public class MyLogger : IMyLogger
+        {
+            private TraceWriter _log;
+
+            public MyLogger(TraceWriter log)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                _log = log;
             }
-            //finally
-            //{
-            //    Console.WriteLine("Executing finally block.");
-            //}
 
-
-            return codes;
+            void IMyLogger.log(string str)
+            {
+                string message = str + "    :" + DateTime.Now.ToString("h:mm:ss tt");
+                _log.Info(message);
+            }
         }
 
-    }
-    public interface IMyLogger
-    {
-        void log(string str);
-    }
-    internal class MyLogger : IMyLogger
-    {
-        private TraceWriter _log;
-        internal MyLogger(TraceWriter log)
+        #endregion
+
+
+        #region "data classes"
+
+        public class CodaCode
         {
-            _log = log;
+            public int Id { get; set; }
+            public string PolicyNumber { get; set; }
+            public string Coda { get; set; }
         }
-        void IMyLogger.log(string str)
-        {
-            string message = str + "    :" + DateTime.Now.ToString("h:mm:ss tt");
-            _log.Info(message);
-        }
-    }
-    #endregion
 
+        #endregion
 
-    #region "data classes"
-    public class CodaCode
-    {
-        internal int Id { get; set; }
-        internal string PolicyNumber { get; set; }
-        internal string Coda { get; set; }
     }
-    #endregion
 
 }

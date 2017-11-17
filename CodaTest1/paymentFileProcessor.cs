@@ -57,7 +57,7 @@ namespace CodaTest1
     //}
 
 
-    //internal class myDal
+    //public class myDal
     //{
 
     //    //public async Task<SqlDataReader> getCodaCodes()
@@ -86,7 +86,7 @@ namespace CodaTest1
 
 
 
-    //internal class PaymentProcessor
+    //public class PaymentProcessor
     //{
     //    private readonly TraceWriter _log;
     //    //public PaymentProcessor(JhXmlWriter writer, TraceWriter log)      //interfaces -   ITraceWriter?
@@ -99,9 +99,9 @@ namespace CodaTest1
     //    //***************
 
 
-    //    // internal void Process(Stream PmInFile, Stream CmInFile, Stream PmCmOutFile, string filename)
+    //    // public void Process(Stream PmInFile, Stream CmInFile, Stream PmCmOutFile, string filename)
 
-    //    internal void Process(Stream pmInFile, List<CodaCode> codes)
+    //    public void Process(Stream pmInFile, List<CodaCode> codes)
     //    {
 
     //        ProcessedPayment pp;
@@ -166,17 +166,17 @@ namespace CodaTest1
     //    }
     //}
 
-    //internal class ProcessedPayment
+    //public class ProcessedPayment
     //{
-    //    // internal int Id { get; set; }
-    //    internal string PolicyNumber { get; set; }
-    //    internal string CodaCode { get; set; }
+    //    // public int Id { get; set; }
+    //    public string PolicyNumber { get; set; }
+    //    public string CodaCode { get; set; }
     //}
-    //internal class CodaCode
+    //public class CodaCode
     //{
-    //    internal int Id { get; set; }
-    //    internal string PolicyNumber { get; set; }
-    //    internal string Coda { get; set; }
+    //    public int Id { get; set; }
+    //    public string PolicyNumber { get; set; }
+    //    public string Coda { get; set; }
     //}
 
 
